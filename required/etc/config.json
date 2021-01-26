@@ -1,0 +1,25 @@
+{
+    "version" : "1.0",
+    "root" : "E:/Projects/iV Pro",
+    "etc_path" : "required/etc",
+    "var_path" : "required/var",
+    "connection_string" : "system.db",
+    "config_file" : "config.json",
+    "log_file" : "access.log",
+    "copyright" : "\u00a9 2021 Tanaka Mutsatsa, all rights reserved.",
+    "author" : "Tanaka Mutsatsa",
+    "date" : "31/1/2021",
+    "company" : "Studio KOJAN",
+    "tel" : "07398290770",
+    "email" : "admin@studiokojan.com",
+    "public_release" : false,
+    "password" : "4d164cbf641eabdcfd4a61eab475f245a559a3f8b287618fb3d414b07eea86df",
+    "authorised" : [
+        "d23ff466e452db6e45e4c1bac2bdb4ce3bf9fd37789500b266f4145c7bb209dc"
+    ],
+    "required" : ["lib", "sys"],
+    "help" : [
+        "-t : launch terminal",
+        "-h : show this dialog"
+    ]
+}
