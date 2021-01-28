@@ -1,6 +1,6 @@
 ''' Bootloader '''
 from pdb import set_trace as pause
-import os, sys, datetime, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, tkinter
+import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, tkinter, center_tk_window
 
 class StartupError(Exception): pass
 class AuthError(Exception): pass
@@ -37,14 +37,21 @@ with open('E:/Projects/iV Pro/required/etc/config.json', 'r') as f: config.updat
 for _ in config['required']:
     if not os.path.join(config['root'], 'required', _) in sys.path: sys.path.append(os.path.join(config['root'], 'required', _))
 
-from engine import Engine
-from editor import Editor
-from client import Client
+class Client:
+    running:bool
 
-splash:tkinter.Tk = None
-client:Client = None
-editor:Editor = None
-engine:Engine = None
+    def __init__(self) -> None:
+        Client.running = True
+
+    def __call__(self, *args:list, **kwds:dict) -> dict:
+        o = input('> ').rstrip().split(':')
+
+class Engine:
+    def __init__(self) -> None:
+        pass
+
+client:Client = None; engine:Engine = None # processes
+splash:tkinter.Tk = None;  editor:tkinter.Tk = None # windows
 
 def report(message:str, verbose:bool=False): 
     with open(os.path.join(config['root'], config['etc_path'], config['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
@@ -58,15 +65,40 @@ def loop() -> None:
 
 def show():
     ''' Loads the editor '''
+    global splash
     splash = tkinter.Tk()
-    # build splashscreen
+    splash.title('Welcome')
+    min_width = 600; min_height = 400
+    splash.geometry('%sx%s+0+0' % (min_width, min_height))
+    splash.resizable(0, 0)
+    image = tkinter.PhotoImage(file = f"{config['root']}/{config['var_path']}/splash.gif") 
+    handle = tkinter.Label( splash, image = image) 
+    handle.place(x = 0, y = 0)
+    button = tkinter.Button(splash, text ='Launch', command = start)
+    button.pack()
+    splash.wm_attributes('-topmost', True)
+    splash.protocol('WM_DELETE_WINDOW', onexit)
+    center_tk_window.center(splash, splash)
+    #splash.after_idle(start)
     splash.mainloop()
 
-def build():
-    ''' Load application data '''
-    global engine, editor
-    engine = Engine()
-    editor = Editor()
+def start(*args, **kwargs):
+    global engine, editor, splash
+    #engine = Engine()
+    editor = tkinter.Tk()
+    editor.title('iV Pro')
+    min_width = 1280; min_height = 720
+    editor.geometry('%sx%s+0+0' % (min_width, min_height))
+    editor.minsize(min_width, min_height)
+    editor.maxsize(editor.winfo_screenwidth(), editor.winfo_screenheight())
+    #image = tkinter.PhotoImage(file = f"{config['root']}/{config['var_path']}/iris.png")
+    #editor.iconphoto(False, image)
+    #editor.wm_attributes("-disabled", True)
+    editor.state('zoomed')
+    center_tk_window.center(editor, editor)
+    splash.destroy()
+
+def onexit(): pass
 
 # entry point
 if __name__ == '__main__':
