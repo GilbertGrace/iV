@@ -1,1 +1,2 @@
-support/*
+support
+__pycache__
