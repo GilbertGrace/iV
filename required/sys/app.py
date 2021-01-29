@@ -40,12 +40,10 @@ for _ in config['required']:
     if not os.path.join(config['splash'], 'required', _) in sys.path: sys.path.append(os.path.join(config['splash'], 'required', _))
 
 class Client:
-    running:bool
+    running:bool = False
 
-    def __init__(self) -> None:
-        Client.running = True
-
-    def __call__(self, *args:list, **kwds:dict) -> dict:
+    @staticmethod
+    def execute(self, *args:list, **kwds:dict) -> dict:
         o = input('> ').rstrip().split('::')#; pause()
         if o[0] == 'serialise':
             with open(o[1], 'r') as f: write(f.read(), o[2])
@@ -54,28 +52,30 @@ class Client:
 
 class Engine:
     def __init__(self) -> None:
-        global pool
+        global pool, splash, progress
         report('Engine waking...')
         x:object = None
         
-        # load sfx archives
+        # load modules
         modules = glob.glob('E:/Projects/iV Pro/required/var/modules/*.sfx')
+        length = len(modules); count = 1
+        if length: progress_chunk_size = round(100 / length)
+        else: progress_chunk_size = 100
 
         for _ in modules:
             with open(_, 'r') as f: pool.update(json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')))
+            time.sleep(0.1)
+            progress['value'] = progress_chunk_size * count; 
+            splash.update_idletasks()
+            count += 1
 
-        pause()
-        progress['value'] = 60
-        splash.update_idletasks()
-        time.sleep(0.2)
-
+        #time.sleep(0.2)
+        progress['value'] = 100
         report('Engine awake')
 
-    def __call__(self, *args: list, **kwds:dict) -> any: return 0
+    def render(): return
 
-client:Client = None; engine:Engine = None # processes
-splash:tkinter.Tk = None;  editor:tkinter.Tk = None # windows
-progress:object
+splash:tkinter.Tk = None;  editor:tkinter.Tk = None; engine:Engine = None; progress:object = None
 
 def report(message:str, verbose:bool=False): 
     with open(os.path.join(config['splash'], config['etc_path'], config['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
@@ -91,8 +91,8 @@ def write(source:str, target:str):
 
 def loop() -> None:
     ''' Terminal thread loop '''
-    client = Client()
-    while (client.running): client()
+    Client.running = True
+    while (Client.running): Client.execute()
     raise Exit # finished
 
 def show():
@@ -118,18 +118,13 @@ def show():
     splash.mainloop()
 
 def start(*args, **kwargs):
+    import ttk
     global engine, editor, splash, progress
     #engine = Engine()
-    progress['value'] = 20
-    splash.update_idletasks()
-    time.sleep(0.2) 
 
     editor = tkinter.Tk()
+    editor.wm_attributes("-disabled", True)
     editor.title('iV Pro')
-    
-    progress['value'] = 40
-    splash.update_idletasks()
-    time.sleep(0.2) 
   
     min_width = 1280; min_height = 720
     editor.geometry('%sx%s+0+0' % (min_width, min_height))
@@ -137,23 +132,80 @@ def start(*args, **kwargs):
     editor.maxsize(editor.winfo_screenwidth(), editor.winfo_screenheight())
     #image = tkinter.PhotoImage(file = f"{config['splash']}/{config['var_path']}/iris.png")
     #editor.iconphoto(False, image)
-    #editor.wm_attributes("-disabled", True)
+    menubar = tkinter.Menu(editor)
+    filemenu = tkinter.Menu(menubar, tearoff=0)
+    filemenu.add_command(label="New", command=closing)
+    filemenu.add_command(label="Open", command=closing)
+    filemenu.add_command(label="Save", command=closing)
+    filemenu.add_command(label="Save as...", command=closing)
+    filemenu.add_command(label="Close", command=closing)
+
+    filemenu.add_separator()
+
+    filemenu.add_command(label="Exit", command=editor.quit)
+    menubar.add_cascade(label="File", menu=filemenu)
+    editmenu = tkinter.Menu(menubar, tearoff=0)
+    editmenu.add_command(label="Undo", command=closing)
+
+    editmenu.add_separator()
+
+    editmenu.add_command(label="Cut", command=closing)
+    editmenu.add_command(label="Copy", command=closing)
+    editmenu.add_command(label="Paste", command=closing)
+    editmenu.add_command(label="Delete", command=closing)
+    editmenu.add_command(label="Select All", command=closing)
+
+    menubar.add_cascade(label="Edit", menu=editmenu)
+    helpmenu = tkinter.Menu(menubar, tearoff=0)
+    helpmenu.add_command(label="Help Index", command=closing)
+    helpmenu.add_command(label="About...", command=closing)
+    menubar.add_cascade(label="Help", menu=helpmenu)
+
+    editor.config(menu=menubar)
+
+    tabControl = ttk.Notebook(editor)
+
+    project = ttk.Frame(tabControl)
+    tabControl.add(project, text ='Project')
+
+    viewport = ttk.Frame(tabControl)
+    tabControl.add(viewport, text ='Viewport')
+    
+    browser = ttk.Frame(tabControl)
+    tabControl.add(browser, text ='Browser')
+    
+    texture = ttk.Frame(tabControl)
+    tabControl.add(texture, text ='Texture')
+
+    illustration = ttk.Frame(tabControl)
+    tabControl.add(illustration, text ='Illustration')
+
+    animation = ttk.Frame(tabControl)
+    tabControl.add(animation, text ='Animation')
+
+    sculpting = ttk.Frame(tabControl)
+    tabControl.add(sculpting, text ='Sculpting')
+
+    scripting = ttk.Frame(tabControl)
+    tabControl.add(scripting, text ='Scripting')
+
+    sequence = ttk.Frame(tabControl)
+    tabControl.add(sequence, text ='Sequence')
+
+    export = ttk.Frame(tabControl)
+    tabControl.add(export, text ='Export')
+
+    tabControl.pack(expand = 1, fill ="both", side='top')
+
+    #ttk.Label(tab1, text ="Welcome to \ GeeksForGeeks").grid(column = 0, row = 0, padx = 30, pady = 30)
+    #ttk.Label(tab2, text ="Lets dive into the\ world of computers").grid(column = 0, row = 0, padx = 30, pady = 30)
     editor.state('zoomed')
     center_tk_window.center(editor, editor)
 
-    progress['value'] = 50
-    splash.update_idletasks()
-    time.sleep(0.2)
-
     engine = Engine()
-  
-    progress['value'] = 80
-    splash.update_idletasks()
-    time.sleep(0.2) 
-    progress['value'] = 100
-    splash.destroy()
+    closing()
 
-def closing(): splash.destroy()
+def closing(): editor.wm_attributes("-disabled", False); splash.destroy()
 
 # entry point
 if __name__ == '__main__':
