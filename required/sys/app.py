@@ -1,6 +1,6 @@
 ''' Bootloader '''
 from pdb import set_trace as pause
-import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, tkinter, center_tk_window
+import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, tkinter, center_tk_window, binascii
 
 class StartupError(Exception): pass
 class AuthError(Exception): pass
@@ -32,6 +32,8 @@ config:dict = {
     ]
 }
 
+pool:dict = dict() # data
+
 with open('E:/Projects/iV Pro/required/etc/config.json', 'r') as f: config.update(json.loads(f.read()))
 
 for _ in config['required']:
@@ -45,10 +47,27 @@ class Client:
 
     def __call__(self, *args:list, **kwds:dict) -> dict:
         o = input('> ').rstrip().split(':')
+        # json.dumps
 
 class Engine:
     def __init__(self) -> None:
-        pass
+        global pool
+        report('Engine waking...')
+        x:object = None
+        
+        # load sfx archives
+        modules = glob.glob('E:/Projects/iV Pro/required/var/modules/*.sfx')
+
+        for _ in modules:
+            with open(_, 'r') as f: pool.update(json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')))
+
+        progress['value'] = 60
+        splash.update_idletasks()
+        time.sleep(0.2)
+
+        report('Engine awake')
+
+    def __call__(self, *args: list, **kwds:dict) -> any: return 0
 
 client:Client = None; engine:Engine = None # processes
 splash:tkinter.Tk = None;  editor:tkinter.Tk = None # windows
@@ -57,6 +76,14 @@ progress:object
 def report(message:str, verbose:bool=False): 
     with open(os.path.join(config['splash'], config['etc_path'], config['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
     if verbose: print(message)
+
+def read(source:str) -> str:
+    ''' Deserialise '''
+    return source
+
+def write(source:str, target:str):
+    ''' Serialise '''
+    with open(target, 'wb') as f: f.write(binascii.hexlify(bytes(source, 'utf-8')))
 
 def loop() -> None:
     ''' Terminal thread loop '''
@@ -73,7 +100,7 @@ def show():
     min_width = 600; min_height = 400
     splash.geometry('%sx%s+0+0' % (min_width, min_height))
     splash.resizable(0, 0)
-    image = tkinter.PhotoImage(file = f"{config['splash']}/{config['var_path']}/splash.gif") 
+    image = tkinter.PhotoImage(file = f"{config['splash']}/{config['var_path']}/media/splash.gif") 
     handle = tkinter.Label( splash, image = image) 
     handle.place(x = 0, y = 0)
     button = tkinter.Button(splash, text ='Launch', command = start)
@@ -90,28 +117,16 @@ def start(*args, **kwargs):
     global engine, editor, splash, progress
     #engine = Engine()
     progress['value'] = 20
-    splash.update_idletasks() 
-    time.sleep(1) 
-  
-    progress['value'] = 40
-    splash.update_idletasks() 
-    time.sleep(1) 
-  
-    progress['value'] = 50
-    splash.update_idletasks() 
-    time.sleep(1) 
-  
-    progress['value'] = 60
-    splash.update_idletasks() 
-    time.sleep(1) 
-  
-    progress['value'] = 80
-    splash.update_idletasks() 
-    time.sleep(1) 
-    progress['value'] = 100
+    splash.update_idletasks()
+    time.sleep(0.2) 
 
     editor = tkinter.Tk()
     editor.title('iV Pro')
+    
+    progress['value'] = 40
+    splash.update_idletasks()
+    time.sleep(0.2) 
+  
     min_width = 1280; min_height = 720
     editor.geometry('%sx%s+0+0' % (min_width, min_height))
     editor.minsize(min_width, min_height)
@@ -121,6 +136,17 @@ def start(*args, **kwargs):
     #editor.wm_attributes("-disabled", True)
     editor.state('zoomed')
     center_tk_window.center(editor, editor)
+
+    progress['value'] = 50
+    splash.update_idletasks()
+    time.sleep(0.2)
+
+    engine = Engine()
+  
+    progress['value'] = 80
+    splash.update_idletasks()
+    time.sleep(0.2) 
+    progress['value'] = 100
     splash.destroy()
 
 def closing(): splash.destroy()
