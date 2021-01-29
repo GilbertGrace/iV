@@ -1,0 +1,1495 @@
+{
+    "title" : "Studio KOJAN",
+    "masonry" : {
+        "selector" : ".tile",
+        "columnWidth" : 220
+    },
+    "vue" : {
+        "el" : "#a-app",
+        "data" : {
+            "query" : "",
+            "user" : {
+                "username" : ""
+            },
+            "session" : {
+                "active" : true,
+                "hud" : {
+                    "active" : true,
+                    "tabs" : [],
+                    "progress" : {
+                        "active" : true,
+                        "max" : 100,
+                        "value" : 70,
+                        "slider" : {
+                            "active" : false
+                        },
+                        "bar" : {
+                            "active" : true
+                        }
+                    },
+                    "switch" : {
+                        "active" : false,
+                        "selected" : "",
+                        "tabs" : []
+                    },
+                    "notify" : {
+                        "active" : false,
+                        "items" : [],
+                        "text" : {
+                            "active" : true
+                        },
+                        "symbol" : {
+                            "active" : true
+                        }
+                    },
+                    "title" : {
+                        "active" : false,
+                        "text" : "Studio <span style='font-weight:bold;'>KOJAN</span>"
+                    },
+                    "search" : {
+                        "active" : true,
+                        "items" : [],
+                        "button" : {
+                            "active" : true
+                        },
+                        "input" : {
+                            "active" : true,
+                            "placeholder" : "Search...",
+                            "query" : ""
+                        }
+                    },
+                    "media" : {
+                        "active" : false,
+                        "items" : [],
+                        "info" : {
+                            "active" : true,
+                            "now_playing" : {
+                                "active" : true,
+                                "text" : ""
+                            },
+                            "page_count" : {
+                                "active" : false,
+                                "text" : ""
+                            }
+                        },
+                        "left" : {
+                            "active" : true
+                        },
+                        "center" : {
+                            "active" : true
+                        },
+                        "right" : {
+                            "active" : true
+                        },
+                        "game" : {
+                            "active" : false,
+                            "score" : {
+                                "active" : false
+                            }
+                        }
+                    },
+                    "basket" : {
+                        "active" : false,
+                        "total" : {
+                            "active" : false
+                        },
+                        "checkout" : {
+                            "active" : false
+                        }
+                    },
+                    "profile" : {
+                        "active" : false,
+                        "rank" : {
+                            "active" : false
+                        },
+                        "xp" : {
+                            "active" : false
+                        },
+                        "image" : {
+                            "active" : false
+                        }
+                    }
+                },
+                "drop" : {
+                    "active" : false,
+                    "items" : []
+                },
+                "modal" : {
+                    "active" : false,
+                    "items" : [],
+                    "title" : {
+                        "active" : false
+                    }
+                },
+                "detector" : {
+                    "active" : true,
+                    "items" : []
+                },
+                "dash" : {
+                    "active" : false,
+                    "panels" : [],
+                    "title" : {
+                        "text" : "Welcome.",
+                        "active" : false
+                    },
+                    "motto" : {
+                        "text" : "Site under construction.",
+                        "active" : false
+                    },
+                    "selector" : {
+                        "active" : false,
+                        "items" : []
+                    },
+                    "tooltip" : {
+                        "text" : "",
+                        "active" : false
+                    }
+                },
+                "mosaic" : {
+                    "active" : true,
+                    "tooltip" : {
+                        "active" : false
+                    },
+                    "tiles" : []
+                }
+            },
+            "basket" : {
+                "active" : false,
+                "items" : []
+            },
+            "player" : {
+                "active" : false,
+                "items" : []
+            },
+            "project" : {
+                "active" : false,
+                "items" : []
+            },
+            "content" : {
+                "oops" : {
+                    "active" : true
+                },
+                "a_new_order_2" : {
+                    "active" : true
+                },
+                "a_new_order_3" : {
+                    "active" : true
+                },
+                "a_new_order" : {
+                    "active" : true
+                },
+                "amin" : {
+                    "active" : true
+                },
+                "amin_2" : {
+                    "active" : true
+                },
+                "amin_3" : {
+                    "active" : true
+                },
+                "amin_4" : {
+                    "active" : true
+                },
+                "amin_5" : {
+                    "active" : true
+                },
+                "medley" : {
+                    "active" : true
+                },
+                "blackwater_sails_and_sirens" : {
+                    "active" : true
+                },
+                "hunter_in_the_shadows" : {
+                    "active" : true
+                },
+                "gunmetal_grey" : {
+                    "active" : true
+                },
+                "low_polly" : {
+                    "active" : true
+                },
+                "the_ark" : {
+                    "active" : true
+                },
+                "the_life_of_ned" : {
+                    "active" : true
+                },
+                "blokabonk" : {
+                    "active" : true
+                },
+                "pyrocenia" : {
+                    "active" : true
+                },
+                "ironheart" : {
+                    "active" : true
+                },
+                "odyssey" : {
+                    "active" : true
+                },
+                "clausterphilia" : {
+                    "active" : true
+                },
+                "the_conscious_argument" : {
+                    "active" : true
+                },
+                "the_conscious_argument_2" : {
+                    "active" : true
+                },
+                "the_conscious_argument_3" : {
+                    "active" : true
+                },
+                "the_conscious_argument_4" : {
+                    "active" : true
+                },
+                "the_conscious_argument_5" : {
+                    "active" : true
+                },
+                "everything_vs_him" : {
+                    "active" : true
+                },
+                "everything_vs_him_2" : {
+                    "active" : true
+                },
+                "everything_vs_him_3" : {
+                    "active" : true
+                },
+                "new_haven" : {
+                    "active" : true
+                },
+                "the_morning" : {
+                    "active" : true
+                },
+                "requiem" : {
+                    "active" : true
+                },
+                "ex_machina" : {
+                    "active" : true
+                },
+                "ex_machina_2" : {
+                    "active" : true
+                },
+                "omen" : {
+                    "active" : true
+                },
+                "tribute" : {
+                    "active" : true
+                },
+                "rebirth" : {
+                    "active" : true
+                },
+                "uprising" : {
+                    "active" : true
+                },
+                "darkstar" : {
+                    "active" : true
+                },
+                "red_october" : {
+                    "active" : true
+                },
+                "soulseeker" : {
+                    "active" : true
+                },
+                "the_situation_of_opposites" : {
+                    "active" : true
+                },
+                "the_hybrid_pact" : {
+                    "active" : true
+                },
+                "the_world_she_knew" : {
+                    "active" : true
+                },
+                "wish" : {
+                    "active" : true
+                },
+                "promise" : {
+                    "active" : true
+                },
+                "survive" : {
+                    "active" : true
+                },
+                "solar_star_rising" : {
+                    "active" : true
+                },
+                "end_of_hueyraisses" : {
+                    "active" : true
+                },
+                "pink_n_blu" : {
+                    "active" : true
+                },
+                "veronica_xd" : {
+                    "active" : true
+                },
+                "to_you" : {
+                    "active" : true
+                },
+                "hero" : {
+                    "active" : true
+                },
+                "the_author" : {
+                    "active" : true
+                },
+                "farm" : {
+                    "active" : true
+                },
+                "masks_off" : {
+                    "active" : true
+                },
+                "father" : {
+                    "active" : true
+                },
+                "remember_the_monsters" : {
+                    "active" : true
+                },
+                "confront_the_minotaur" : {
+                    "active" : true
+                },
+                "worlds_collide" : {
+                    "active" : true
+                },
+                "worlds_collide_2" : {
+                    "active" : true
+                },
+                "worlds_collide_3" : {
+                    "active" : true
+                },
+                "worlds_collide_4" : {
+                    "active" : true
+                },
+                "worlds_collide_5" : {
+                    "active" : true
+                },
+                "the_forest" : {
+                    "active" : true
+                },
+                "the_desert" : {
+                    "active" : true
+                },
+                "the_mountain" : {
+                    "active" : true
+                },
+                "hueyraisses" : {
+                    "active" : true
+                },
+                "othellese" : {
+                    "active" : true
+                },
+                "gods_and_monsters" : {
+                    "active" : true
+                },
+                "stormbringer" : {
+                    "active" : true
+                },
+                "brothers_in_arms" : {
+                    "active" : true
+                },
+                "brothers_in_arms_2" : {
+                    "active" : true
+                },
+                "exodus" : {
+                    "active" : true
+                },
+                "pilot" : {
+                    "active" : true
+                },
+                "mirrors" : {
+                    "active" : true
+                },
+                "evolve_or_go_extinct" : {
+                    "active" : true
+                },
+                "book_of_false_prophets" : {
+                    "active" : true
+                },
+                "contest_of_champions" : {
+                    "active" : true
+                },
+                "theory_of_a_complex_hybrid" : {
+                    "active" : true
+                },
+                "the_messenger" : {
+                    "active" : true
+                },
+                "the_human_war" : {
+                    "active" : true
+                },
+                "the_human_war_2" : {
+                    "active" : true
+                },
+                "the_human_war_3" : {
+                    "active" : true
+                },
+                "the_lone_wolf_and_the_girl" : {
+                    "active" : true
+                },
+                "the_ought" : {
+                    "active" : true
+                },
+                "maximum_of_identities" : {
+                    "active" : true
+                },
+                "village_massacre" : {
+                    "active" : true
+                },
+                "witness_me" : {
+                    "active" : true
+                },
+                "protogenerics" : {
+                    "active" : true
+                }
+            }
+        },
+        "watch" : {
+
+        }
+    },
+    "ui" : {
+        "a-app" : {
+            "id" : "a-app",
+            "class" : "level-0 app",
+            "tagname" : "div",
+            "v-if" : "session.active",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "b-detector" : {
+            "id" : "b-detector",
+            "class" : "level-1 detector",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "v-if" : "session.detector.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "b-hud" : {
+            "id" : "b-hud",
+            "class" : "level-1 hud",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "v-if" : "session.hud.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-hud-title" : {
+            "id" : "c-hud-title",
+            "class" : "level-2 hud-title",
+            "tagname" : "p",
+            "parent" : "b-hud",
+            "v-if" : "session.hud.title.active",
+            "v-html" : "session.hud.title.text",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-html",
+                "class"
+            ]
+        },
+        "c-hud-progress" : {
+            "id" : "c-hud-progress",
+            "class" : "level-2 hud-progress",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "v-if" : "session.hud.progress.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-progress-slider" : {
+            "id" : "d-hud-progress-slider",
+            "class" : "level-3 hud-progress-slider",
+            "tagname" : "input",
+            "type" : "range",
+            "parent" : "c-hud-progress",
+            "v-if" : "session.hud.progress.slider.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "type",
+                "class"
+            ]
+        },
+        "d-hud-progress-bar" : {
+            "id" : "d-hud-progress-bar",
+            "class" : "level-3 hud-progress-bar",
+            "tagname" : "progress",
+            "v-if" : "session.hud.progress.bar.active",
+            "parent" : "c-hud-progress",
+            "innerHTML" : "",
+            ":value" : "session.hud.progress.value",
+            ":max" : "session.hud.progress.max",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                ":value",
+                ":max",
+                "class"
+            ]
+        },
+        "c-hud-media" : {
+            "id" : "c-hud-media",
+            "class" : "level-2 hud-media",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "v-if" : "session.hud.media.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-media-info" : {
+            "id" : "d-hud-media-info",
+            "class" : "level-3 hud-media-info",
+            "tagname" : "div",
+            "parent" : "c-hud-media",
+            "v-if" : "session.hud.media.info.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "e-hud-media-info-now-playing" : {
+            "id" : "e-hud-media-info-now-playing",
+            "class" : "level-4 hud-media-info-now-playing",
+            "tagname" : "p",
+            "parent" : "d-hud-media-info",
+            "v-if" : "session.hud.media.info.now_playing.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "e-hud-media-info-page-count" : {
+            "id" : "e-hud-media-info-page-count",
+            "class" : "level-4 hud-media-info-page-count",
+            "tagname" : "p",
+            "parent" : "d-hud-media-info",
+            "v-if" : "session.hud.media.info.page_count.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-media-left" : {
+            "id" : "d-hud-media-left",
+            "class" : "level-3 hud-media-left",
+            "tagname" : "span",
+            "parent" : "c-hud-media",
+            "innerHTML" : "",
+            "v-if" : "session.hud.media.left.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-media-right" : {
+            "id" : "d-hud-media-right",
+            "class" : "level-3 hud-media-right",
+            "tagname" : "span",
+            "parent" : "c-hud-media",
+            "innerHTML" : "",
+            "v-if" : "session.hud.media.right.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-media-center" : {
+            "id" : "d-hud-media-center",
+            "class" : "level-3 hud-media-center",
+            "tagname" : "span",
+            "v-if" : "session.hud.media.center.active",
+            "parent" : "c-hud-media",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-media-game" : {
+            "id" : "d-hud-media-game",
+            "class" : "level-3 hud-media-game",
+            "tagname" : "div",
+            "v-if" : "session.hud.media.game.active",
+            "parent" : "c-hud-media",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "e-hud-media-game-score" : {
+            "id" : "e-hud-media-game-score",
+            "class" : "level-4 hud-media-game-score",
+            "tagname" : "p",
+            "v-if" : "session.hud.media.game.score.active",
+            "parent" : "d-hud-media-game",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-hud-search" : {
+            "id" : "c-hud-search",
+            "class" : "level-2 hud-search",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "v-if" : "session.hud.search.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-search-button" : {
+            "id" : "d-hud-search-button",
+            "class" : "level-3 hud-search-button glyphicon glyphicon-search",
+            "tagname" : "span",
+            "parent" : "c-hud-search",
+            "innerHTML" : "",
+            "style" : "",
+            "v-if" : "session.hud.search.button.active",
+            "v-on:click" : "search()",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-on:click",
+                "class"
+            ]
+        },
+        "d-hud-search-input" : {
+            "id" : "d-hud-search-input",
+            "class" : "level-3 hud-search-input",
+            "tagname" : "input",
+            "type" : "text",
+            ":placeholder" : "session.hud.search.input.placeholder",
+            ":value" : "query",
+            "v-model" : "query",
+            "name" : "search",
+            "v-on:click" : "",
+            "parent" : "c-hud-search",
+            "innerHTML" : "",
+            "v-if" : "session.hud.search.input.active",
+            "style" : "",
+            "attributes" : [
+                "id",
+                "v-if",
+                "name",
+                "v-model",
+                "v-on:click",
+                ":placeholder",
+                "class"
+            ]
+        },
+        "c-hud-switch" : {
+            "id" : "c-hud-switch",
+            "class" : "level-2 hud-switch",
+            "tagname" : "ul",
+            "parent" : "b-hud",
+            "innerHTML" : "",
+            "v-if" : "session.hud.switch.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-switch-tab" : {
+            "id" : "d-hud-switch-tab",
+            "class" : "level-3 hud-switch-tab",
+            "tagname" : "li",
+            "parent" : "c-hud-switch",
+            "innerHTML" : "",
+            "v-if" : "tab.active",
+            "v-for" : "tab in session.hud.switch.tabs",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "e-hud-switch-tab-title" : {
+            "id" : "e-hud-switch-tab-title",
+            "class" : "level-4 hud-switch-tab-title",
+            "tagname" : "p",
+            "parent" : "d-hud-switch-tab",
+            "innerHTML" : "{{ tab.text }}",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "c-hud-basket" : {
+            "id" : "c-hud-basket",
+            "class" : "level-2 hud-basket",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "innerHTML" : "",
+            "v-if" : "session.hud.basket.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-basket-total" : {
+            "id" : "d-hud-basket-total",
+            "class" : "level-3 hud-basket-total",
+            "tagname" : "p",
+            "parent" : "c-hud-basket",
+            "innerHTML" : "",
+            "v-if" : "session.hud.basket.total.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-basket-checkout" : {
+            "id" : "d-hud-basket-checkout",
+            "class" : "level-3 hud-basket-checkout glyphicon glyphicon-shopping-cart",
+            "tagname" : "span",
+            "v-if" : "session.hud.basket.checkout.active",
+            "parent" : "c-hud-basket",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-hud-profile" : {
+            "id" : "c-hud-profile",
+            "class" : "level-2 hud-profile",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "innerHTML" : "",
+            "v-if" : "session.hud.profile.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-profile-username" : {
+            "id" : "d-hud-profile-username",
+            "class" : "level-3 hud-profile-username",
+            "tagname" : "p",
+            "parent" : "c-hud-profile",
+            "innerHTML" : "{{ user.username }}",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-profile-rank" : {
+            "id" : "d-hud-profile-rank",
+            "class" : "level-3 hud-profile-rank",
+            "tagname" : "p",
+            "parent" : "c-hud-profile",
+            "innerHTML" : "",
+            "v-if" : "session.hud.profile.rank.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-profile-xp" : {
+            "id" : "d-hud-profile-xp",
+            "class" : "level-3 hud-profile-xp",
+            "tagname" : "p",
+            "parent" : "c-hud-profile",
+            "innerHTML" : "",
+            "v-if" : "session.hud.profile.xp.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-profile-image" : {
+            "id" : "d-hud-profile-image",
+            "class" : "level-3 hud-profile-image",
+            "tagname" : "img",
+            "alt" : "Profile Picture",
+            "parent" : "c-hud-profile",
+            "innerHTML" : "",
+            "v-if" : "session.hud.profile.image.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-hud-notify" : {
+            "id" : "c-hud-notify",
+            "class" : "level-2 hud-notify",
+            "tagname" : "div",
+            "parent" : "b-hud",
+            "v-if" : "session.hud.notify.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-notify-text" : {
+            "id" : "d-hud-notify-text",
+            "class" : "level-3 hud-notify-text",
+            "tagname" : "p",
+            "parent" : "c-hud-notify",
+            "innerHTML" : "",
+            "v-if" : "session.hud.notify.text.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-hud-notify-symbol" : {
+            "id" : "d-hud-notify-symbol",
+            "class" : "level-3 hud-notify-symbol",
+            "tagname" : "span",
+            "parent" : "c-hud-notify",
+            "innerHTML" : "",
+            "v-if" : "session.hud.notify.symbol.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "b-modal" : {
+            "id" : "b-modal",
+            "class" : "level-1 modal",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "v-if" : "session.modal.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-modal-title" : {
+            "id" : "c-modal-title",
+            "class" : "level-2 modal-title",
+            "tagname" : "p",
+            "parent" : "b-modal",
+            "innerHTML" : "",
+            "v-if" : "session.modal.title.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-modal-items" : {
+            "id" : "c-modal-items",
+            "class" : "level-2 modal-items",
+            "tagname" : "ul",
+            "parent" : "b-modal",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "d-modal-item" : {
+            "id" : "d-modal-item",
+            "class" : "level-3 modal-item",
+            "tagname" : "li",
+            "parent" : "c-modal-items",
+            "innerHTML" : "",
+            "v-if" : "item.active",
+            "v-for" : "item in session.modal.items",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "e-modal-item-text" : {
+            "id" : "e-modal-item-text",
+            "class" : "level-4 modal-item-text",
+            "tagname" : "p",
+            "parent" : "d-modal-item",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "e-modal-item-symbol" : {
+            "id" : "e-modal-item-symbol",
+            "class" : "level-4 modal-item-symbol",
+            "tagname" : "span",
+            "parent" : "d-modal-item",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "b-drop" : {
+            "id" : "b-drop",
+            "class" : "level-1 drop",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "style" : "",
+            "v-if" : "session.drop.active",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-drop-items" : {
+            "id" : "c-drop-items",
+            "class" : "level-2 drop-items",
+            "tagname" : "ul",
+            "parent" : "b-drop",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "d-drop-item" : {
+            "id" : "d-drop-item",
+            "class" : "level-3 drop-item",
+            "tagname" : "li",
+            "parent" : "c-drop-items",
+            "v-if" : "item.active",
+            "v-for" : "item in session.drop.items",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "e-drop-item-text" : {
+            "id" : "e-drop-item-text",
+            "class" : "level-4 drop-item-text",
+            "tagname" : "p",
+            "parent" : "d-drop-item",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "b-dash" : {
+            "id" : "b-dash",
+            "class" : "level-1 dash",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "v-if" : "session.dash.active",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-dash-panels" : {
+            "id" : "c-dash-panels",
+            "class" : "level-2 dash-panels",
+            "tagname" : "ul",
+            "parent" : "b-dash",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "d-dash-panel" : {
+            "id" : "d-dash-panel",
+            "class" : "level-3 dash-panel",
+            "tagname" : "li",
+            "parent" : "c-dash-panels",
+            "innerHTML" : "",
+            "v-if" : "panel.active",
+            "v-for" : "panel in session.dash.panels",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "e-dash-panel-tile" : {
+            "id" : "e-dash-panel-tile",
+            "class" : "level-4 dash-panel-tile .tile",
+            "tagname" : "div",
+            "parent" : "d-dash-panel",
+            "innerHTML" : "",
+            "v-if" : "tile.active",
+            "v-for" : "tile in panel.tiles",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "f-dash-panel-tile-canvas" : {
+            "id" : "f-dash-panel-tile-canvas",
+            "class" : "level-5 dash-panel-tile-canvas",
+            "tagname" : "embed",
+            "parent" : "e-dash-panel-tile",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "c-dash-title" : {
+            "id" : "c-dash-title",
+            "class" : "level-2 dash-title",
+            "tagname" : "p",
+            "parent" : "b-dash",
+            "innerHTML" : "",
+            "v-html" : "session.dash.title.text",
+            "v-if" : "session.dash.title.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-html",
+                "class"
+            ]
+        },
+        "c-dash-motto" : {
+            "id" : "c-dash-motto",
+            "class" : "level-2 dash-motto",
+            "tagname" : "p",
+            "parent" : "b-dash",
+            "innerHTML" : "",
+            "v-if" : "session.dash.motto.active",
+            "v-html" : "session.dash.motto.text",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-html",
+                "class"
+            ]
+        },
+        "c-dash-selector" : {
+            "id" : "c-dash-selector",
+            "class" : "level-2 dash-selector",
+            "tagname" : "ul",
+            "parent" : "b-dash",
+            "innerHTML" : "",
+            "v-if" : "session.dash.selector.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "d-dash-selector" : {
+            "id" : "d-dash-selector",
+            "class" : "level-3 dash-selector",
+            "tagname" : "li",
+            "parent" : "c-dash-selector",
+            "innerHTML" : "",
+            "v-if" : "panel.selector.active",
+            "v-for" : "panel in session.dash.panels",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "b-dash-tooltip" : {
+            "id" : "b-dash-tooltip",
+            "class" : "level-1 dash-tooltip",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "v-if" : "session.dash.tooltip.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-dash-tooltip-text" : {
+            "id" : "c-dash-tooltip-text",
+            "class" : "level-2 dash-tooltip-text",
+            "tagname" : "p",
+            "parent" : "b-dash-tooltip",
+            "innerHTML" : "",
+            "v-if" : "session.dash.tooltip.active",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "b-mosaic" : {
+            "id" : "b-mosaic",
+            "class" : "level-1 mosaic",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "style" : "",
+            "v-if" : "session.mosaic.active",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "b-mosaic-tooltip" : {
+            "id" : "b-mosaic-tooltip",
+            "class" : "level-1 mosaic-tooltip",
+            "tagname" : "div",
+            "parent" : "a-app",
+            "innerHTML" : "",
+            "style" : "",
+            "v-if" : "session.mosaic.tooltip.active",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "class"
+            ]
+        },
+        "c-mosaic-tooltip-text" : {
+            "id" : "c-mosaic-tooltip-text",
+            "class" : "level-2 mosaic-tooltip-text",
+            "tagname" : "p",
+            "parent" : "b-mosaic-tooltip",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "c-mosaic-tile" : {
+            "id" : "c-mosaic-tile",
+            "class" : "level-2 mosaic-tile .tile",
+            "tagname" : "div",
+            "parent" : "b-mosaic",
+            "innerHTML" : "",
+            "v-if" : "tile.active",
+            "v-for" : "tile in session.mosaic.tiles",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "v-if",
+                "v-for",
+                "class"
+            ]
+        },
+        "d-mosaic-tile-canvas" : {
+            "id" : "d-mosaic-tile-canvas",
+            "class" : "level-3 mosaic-tile-canvas",
+            "tagname" : "embed",
+            "parent" : "c-mosaic-tile",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "d-mosaic-tile-head" : {
+            "id" : "d-mosaic-tile-head",
+            "class" : "level-3 mosaic-tile-head",
+            "tagname" : "div",
+            "parent" : "c-mosaic-tile",
+            "innerHTML" : "",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        },
+        "e-mosaic-tile-text" : {
+            "id" : "e-mosaic-tile-text",
+            "class" : "level-4 mosaic-tile-text",
+            "tagname" : "p",
+            "parent" : "d-mosaic-tile-head",
+            "innerHTML" : "{{ tile.text }}",
+            "style" : "",
+            "listeners" : {
+
+            },
+            "attributes" : [
+                "id",
+                "class"
+            ]
+        }
+    }   
+}

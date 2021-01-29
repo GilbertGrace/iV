@@ -46,8 +46,11 @@ class Client:
         Client.running = True
 
     def __call__(self, *args:list, **kwds:dict) -> dict:
-        o = input('> ').rstrip().split(':')
-        # json.dumps
+        o = input('> ').rstrip().split('::')#; pause()
+        if o[0] == 'serialise':
+            with open(o[1], 'r') as f: write(f.read(), o[2])
+        #elif o[0] == '': pass
+        else: print('syntax error')
 
 class Engine:
     def __init__(self) -> None:
@@ -61,6 +64,7 @@ class Engine:
         for _ in modules:
             with open(_, 'r') as f: pool.update(json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')))
 
+        pause()
         progress['value'] = 60
         splash.update_idletasks()
         time.sleep(0.2)
