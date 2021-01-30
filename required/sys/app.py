@@ -1,14 +1,15 @@
 ''' Bootloader '''
 from pdb import set_trace as pause
-import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, tkinter, center_tk_window, binascii
+import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, center_tk_window, binascii
 
 class StartupError(Exception): pass
 class AuthError(Exception): pass
 class Exit(Exception): pass
 
-config:dict = {
+# data
+stack:dict = {
     'version' : '1.0',
-    'splash' : 'E:/Projects/iV Pro',
+    'root' : 'E:/Projects/iV Pro',
     'etc_path' : 'required/etc',
     'var_path' : 'required/var',
     'connection_string' : 'system.db',
@@ -32,18 +33,19 @@ config:dict = {
     ]
 }
 
-pool:dict = dict() # data
+with open(os.path.join(stack['root'], stack['etc_path'], stack['config_file']), 'r') as f: stack.update(json.loads(f.read()))
 
-with open('E:/Projects/iV Pro/required/etc/config.json', 'r') as f: config.update(json.loads(f.read()))
+for _ in stack['required']:
+    if not os.path.join(stack['root'], 'required', _) in sys.path: sys.path.append(os.path.join(stack['root'], 'required', _))
 
-for _ in config['required']:
-    if not os.path.join(config['splash'], 'required', _) in sys.path: sys.path.append(os.path.join(config['splash'], 'required', _))
+from tkinter import *
+from ttk import *
 
 class Client:
     running:bool = False
 
     @staticmethod
-    def execute(self, *args:list, **kwds:dict) -> dict:
+    def execute(*args:list, **kwds:dict) -> dict:
         o = input('> ').rstrip().split('::')#; pause()
         if o[0] == 'serialise':
             with open(o[1], 'r') as f: write(f.read(), o[2])
@@ -52,33 +54,30 @@ class Client:
 
 class Engine:
     def __init__(self) -> None:
-        global pool, splash, progress
+        global stack, splash, progress
         report('Engine waking...')
-        x:object = None
         
-        # load modules
+        # load modules to stack
         modules = glob.glob('E:/Projects/iV Pro/required/var/modules/*.sfx')
         length = len(modules); count = 1
         if length: progress_chunk_size = round(100 / length)
         else: progress_chunk_size = 100
 
         for _ in modules:
-            with open(_, 'r') as f: pool.update(json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')))
-            time.sleep(0.1)
+            with open(_, 'r') as f: o = json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')); stack.update(o)
+            time.sleep(0.25) # animate progress
             progress['value'] = progress_chunk_size * count; 
-            splash.update_idletasks()
+            splash.update_idletasks() # update graphics
             count += 1
-
-        #time.sleep(0.2)
-        progress['value'] = 100
+        progress['value'] = 100 # done
         report('Engine awake')
 
     def render(): return
 
-splash:tkinter.Tk = None;  editor:tkinter.Tk = None; engine:Engine = None; progress:object = None
+splash:Tk = None;  editor:Tk = None; engine:Engine = None; progress:object = None
 
 def report(message:str, verbose:bool=False): 
-    with open(os.path.join(config['splash'], config['etc_path'], config['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
+    with open(os.path.join(stack['root'], stack['etc_path'], stack['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
     if verbose: print(message)
 
 def read(source:str) -> str:
@@ -97,19 +96,18 @@ def loop() -> None:
 
 def show():
     ''' Loads the editor '''
-    import ttk
     global splash, progress
-    splash = tkinter.Tk()
+    splash = Tk()
     splash.title('Welcome')
     min_width = 600; min_height = 400
     splash.geometry('%sx%s+0+0' % (min_width, min_height))
     splash.resizable(0, 0)
-    image = tkinter.PhotoImage(file = f"{config['splash']}/{config['var_path']}/media/splash.gif") 
-    handle = tkinter.Label( splash, image = image) 
+    image = PhotoImage(file = f"{stack['root']}/{stack['var_path']}/media/splash.gif") 
+    handle = Label( splash, image = image) 
     handle.place(x = 0, y = 0)
-    button = tkinter.Button(splash, text ='Launch', command = start)
+    button = Button(splash, text ='Launch', command = start)
     button.pack()
-    progress = ttk.Progressbar(splash, orient = tkinter.HORIZONTAL, length = 100, mode = 'determinate')
+    progress = Progressbar(splash, orient = HORIZONTAL, length = 100, mode = 'determinate')
     progress.pack(pady = 10)
     splash.wm_attributes('-topmost', True)
     splash.protocol('WM_DELETE_WINDOW', closing)
@@ -117,12 +115,45 @@ def show():
     #splash.after_idle(start)
     splash.mainloop()
 
+def draw() -> None:
+    global stack
+    done:bool = False
+    target = []
+    names = []
+    
+    for key, val in stack.items():
+        if isinstance(val, dict) and 'constructor' in val:
+            target.append(key)
+
+    while(not done):
+        for key in target:
+            if not key in names:
+                o:object = None
+                constructor = stack[key]['constructor']
+                
+                for _ in constructor:
+                    if isinstance(constructor[_], str) and constructor[_][0] == '#': constructor[_] = getattr(sys.modules[__name__], constructor[_][1:]) # resolve symbolic links
+                
+                properties = stack[key]['properties']
+                
+                for prop in properties:
+                    for _ in prop['options']:
+                        if isinstance(prop['options'][_], str) and prop['options'][_][0] == '#': prop['options'][_] = getattr(sys.modules[__name__], prop['options'][_][1:]) # resolve symbolic links
+                
+                o = getattr(sys.modules[__name__], stack[key]['type'])(getattr(sys.modules[__name__], stack[key]['parent']), **constructor) # create object
+
+                for prop in properties: getattr(o, prop['method'])(**prop['options']) # implement property
+                
+                if o: names.append(key)
+                else: o = None
+        if names.sort() == target.sort(): done = True
+        else: done = False
+
 def start(*args, **kwargs):
-    import ttk
     global engine, editor, splash, progress
     #engine = Engine()
 
-    editor = tkinter.Tk()
+    editor = Tk()
     editor.wm_attributes("-disabled", True)
     editor.title('iV Pro')
   
@@ -130,82 +161,18 @@ def start(*args, **kwargs):
     editor.geometry('%sx%s+0+0' % (min_width, min_height))
     editor.minsize(min_width, min_height)
     editor.maxsize(editor.winfo_screenwidth(), editor.winfo_screenheight())
-    #image = tkinter.PhotoImage(file = f"{config['splash']}/{config['var_path']}/iris.png")
+    #image = PhotoImage(file = f"{stack['root']}/{stack['var_path']}/iris.png")
     #editor.iconphoto(False, image)
-    menubar = tkinter.Menu(editor)
-    filemenu = tkinter.Menu(menubar, tearoff=0)
-    filemenu.add_command(label="New", command=closing)
-    filemenu.add_command(label="Open", command=closing)
-    filemenu.add_command(label="Save", command=closing)
-    filemenu.add_command(label="Save as...", command=closing)
-    filemenu.add_command(label="Close", command=closing)
-
-    filemenu.add_separator()
-
-    filemenu.add_command(label="Exit", command=editor.quit)
-    menubar.add_cascade(label="File", menu=filemenu)
-    editmenu = tkinter.Menu(menubar, tearoff=0)
-    editmenu.add_command(label="Undo", command=closing)
-
-    editmenu.add_separator()
-
-    editmenu.add_command(label="Cut", command=closing)
-    editmenu.add_command(label="Copy", command=closing)
-    editmenu.add_command(label="Paste", command=closing)
-    editmenu.add_command(label="Delete", command=closing)
-    editmenu.add_command(label="Select All", command=closing)
-
-    menubar.add_cascade(label="Edit", menu=editmenu)
-    helpmenu = tkinter.Menu(menubar, tearoff=0)
-    helpmenu.add_command(label="Help Index", command=closing)
-    helpmenu.add_command(label="About...", command=closing)
-    menubar.add_cascade(label="Help", menu=helpmenu)
-
-    editor.config(menu=menubar)
-
-    tabControl = ttk.Notebook(editor)
-
-    project = ttk.Frame(tabControl)
-    tabControl.add(project, text ='Project')
-
-    viewport = ttk.Frame(tabControl)
-    tabControl.add(viewport, text ='Viewport')
-    
-    browser = ttk.Frame(tabControl)
-    tabControl.add(browser, text ='Browser')
-    
-    texture = ttk.Frame(tabControl)
-    tabControl.add(texture, text ='Texture')
-
-    illustration = ttk.Frame(tabControl)
-    tabControl.add(illustration, text ='Illustration')
-
-    animation = ttk.Frame(tabControl)
-    tabControl.add(animation, text ='Animation')
-
-    sculpting = ttk.Frame(tabControl)
-    tabControl.add(sculpting, text ='Sculpting')
-
-    scripting = ttk.Frame(tabControl)
-    tabControl.add(scripting, text ='Scripting')
-
-    sequence = ttk.Frame(tabControl)
-    tabControl.add(sequence, text ='Sequence')
-
-    export = ttk.Frame(tabControl)
-    tabControl.add(export, text ='Export')
-
-    tabControl.pack(expand = 1, fill ="both", side='top')
-
-    #ttk.Label(tab1, text ="Welcome to \ GeeksForGeeks").grid(column = 0, row = 0, padx = 30, pady = 30)
-    #ttk.Label(tab2, text ="Lets dive into the\ world of computers").grid(column = 0, row = 0, padx = 30, pady = 30)
     editor.state('zoomed')
     center_tk_window.center(editor, editor)
-
     engine = Engine()
+    draw()
     closing()
 
-def closing(): editor.wm_attributes("-disabled", False); splash.destroy()
+def closing():
+    global splash, editor
+    if editor: editor.wm_attributes("-disabled", False)
+    splash.destroy()
 
 # entry point
 if __name__ == '__main__':
@@ -220,8 +187,8 @@ if __name__ == '__main__':
         if len(opts):
             for o, a in opts:
                 if o in ('-h', '--help'):
-                    print(config['copyright'])
-                    for _ in config['help']: print(_)
+                    print(stack['copyright'])
+                    for _ in stack['help']: print(_)
                     sys.exit(1)
                 elif o in ('-t', '--terminal'): loop()
                 else: raise getopt.GetoptError()
