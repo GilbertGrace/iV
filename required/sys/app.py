@@ -1,15 +1,17 @@
 ''' Bootloader '''
 from pdb import set_trace as pause
-import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, center_tk_window, binascii
+from tkinter import *
+import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, center_tk_window, binascii, random, string
 
 class StartupError(Exception): pass
 class AuthError(Exception): pass
 class Exit(Exception): pass
 
 # data
-stack:dict = {
+cache:dict = {
     'version' : '1.0',
     'root' : 'E:/Projects/iV Pro',
+    'source' : 'support/src',
     'etc_path' : 'required/etc',
     'var_path' : 'required/var',
     'connection_string' : 'system.db',
@@ -33,12 +35,11 @@ stack:dict = {
     ]
 }
 
-with open(os.path.join(stack['root'], stack['etc_path'], stack['config_file']), 'r') as f: stack.update(json.loads(f.read()))
+with open(os.path.join(cache['root'], cache['etc_path'], cache['config_file']), 'r') as f: cache.update(json.loads(f.read()))
 
-for _ in stack['required']:
-    if not os.path.join(stack['root'], 'required', _) in sys.path: sys.path.append(os.path.join(stack['root'], 'required', _))
+for _ in cache['required']:
+    if not os.path.join(cache['root'], 'required', _) in sys.path: sys.path.append(os.path.join(cache['root'], 'required', _))
 
-from tkinter import *
 from ttk import *
 
 class Client:
@@ -47,28 +48,38 @@ class Client:
     @staticmethod
     def execute(*args:list, **kwds:dict) -> dict:
         o = input('> ').rstrip().split('::')#; pause()
-        if o[0] == 'serialise':
-            with open(o[1], 'r') as f: write(f.read(), o[2])
+        if o[0] == 'make':
+            for _ in glob.glob(os.path.join(cache['root'], cache['source'], '*.json')):
+                file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{"".join(random.choice(string.digits) for i in range(25))}.sfx')
+                while file in glob.glob(os.path.join(cache['root'], cache['var_path'], 'modules/*.json')): file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{"".join(random.choice(string.digits) for i in range(25))}.sfx')
+                with open(_, 'r') as f: write(f.read(), file)
         #elif o[0] == '': pass
         else: print('syntax error')
 
 class Engine:
     def __init__(self) -> None:
-        global stack, splash, progress
+        global cache, splash, progress
         report('Engine waking...')
         
-        # load modules to stack
+        # load modules to cache
         modules = glob.glob('E:/Projects/iV Pro/required/var/modules/*.sfx')
-        length = len(modules); count = 1
+        length = len(modules)
+        progress_chunk_size = 100; count = 1
         if length: progress_chunk_size = round(100 / length)
-        else: progress_chunk_size = 100
 
         for _ in modules:
-            with open(_, 'r') as f: o = json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')); stack.update(o)
-            time.sleep(0.25) # animate progress
-            progress['value'] = progress_chunk_size * count; 
+            with open(_, 'r') as f: o = json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')); cache.update(o)
+            splash.after(10, None) # animate progress
+            progress['value'] = progress_chunk_size * count
             splash.update_idletasks() # update graphics
             count += 1
+
+        for key, val in cache.items():
+            if isinstance(val, dict) and 'methodname' in val:
+                # declare global functions
+                def __foo__(): exec(val['method'])
+                if not val['methodname'] in dir(sys.modules[__name__]): setattr(sys.modules[__name__], val['methodname'], __foo__)
+
         progress['value'] = 100 # done
         report('Engine awake')
 
@@ -77,7 +88,7 @@ class Engine:
 splash:Tk = None;  editor:Tk = None; engine:Engine = None; progress:object = None
 
 def report(message:str, verbose:bool=False): 
-    with open(os.path.join(stack['root'], stack['etc_path'], stack['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
+    with open(os.path.join(cache['root'], cache['etc_path'], cache['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
     if verbose: print(message)
 
 def read(source:str) -> str:
@@ -102,7 +113,7 @@ def show():
     min_width = 600; min_height = 400
     splash.geometry('%sx%s+0+0' % (min_width, min_height))
     splash.resizable(0, 0)
-    image = PhotoImage(file = f"{stack['root']}/{stack['var_path']}/media/splash.gif") 
+    image = PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/splash.gif") 
     handle = Label( splash, image = image) 
     handle.place(x = 0, y = 0)
     button = Button(splash, text ='Launch', command = start)
@@ -116,38 +127,43 @@ def show():
     splash.mainloop()
 
 def draw() -> None:
-    global stack
+    ''' UI builder '''
+    global cache
     done:bool = False
     target = []
     names = []
+    count = 0
     
-    for key, val in stack.items():
-        if isinstance(val, dict) and 'constructor' in val:
-            target.append(key)
+    for key, val in cache.items():
+        if isinstance(val, dict) and 'constructor' in val: target.append(key)
 
-    while(not done):
+    while(not done and count < 3):
         for key in target:
             if not key in names:
-                o:object = None
-                constructor = stack[key]['constructor']
-                
-                for _ in constructor:
-                    if isinstance(constructor[_], str) and constructor[_][0] == '#': constructor[_] = getattr(sys.modules[__name__], constructor[_][1:]) # resolve symbolic links
-                
-                properties = stack[key]['properties']
-                
-                for prop in properties:
-                    for _ in prop['options']:
-                        if isinstance(prop['options'][_], str) and prop['options'][_][0] == '#': prop['options'][_] = getattr(sys.modules[__name__], prop['options'][_][1:]) # resolve symbolic links
-                
-                o = getattr(sys.modules[__name__], stack[key]['type'])(getattr(sys.modules[__name__], stack[key]['parent']), **constructor) # create object
+                try:
+                    o:object = None
+                    constructor = cache[key]['constructor']
+                    properties = cache[key]['properties']
+                    
+                    for _ in constructor:
+                        if isinstance(constructor[_], str) and constructor[_][0] == '@': constructor[_] = getattr(sys.modules[__name__], constructor[_][1:]) # resolve symbolic links
+                                    
+                    for prop in properties:
+                        for _ in prop['options']:
+                            if isinstance(prop['options'][_], str) and prop['options'][_][0] == '@': prop['options'][_] = getattr(sys.modules[__name__], prop['options'][_][1:]) # resolve symbolic links
+                    
+                    o = getattr(sys.modules[__name__], cache[key]['type'])(getattr(sys.modules[__name__], cache[key]['parent']), **constructor) # create object
 
-                for prop in properties: getattr(o, prop['method'])(**prop['options']) # implement property
-                
-                if o: names.append(key)
-                else: o = None
+                    for prop in properties: getattr(o, prop['method'])(**prop['options']) # implement property
+                    
+                    if o: names.append(key)
+                    else: o = None
+                except Exception as e: report(e, True)
+
         if names.sort() == target.sort(): done = True
-        else: done = False
+        else: done = False; count += 1
+
+    if names.sort() != target.sort(): raise StartupError
 
 def start(*args, **kwargs):
     global engine, editor, splash, progress
@@ -161,7 +177,7 @@ def start(*args, **kwargs):
     editor.geometry('%sx%s+0+0' % (min_width, min_height))
     editor.minsize(min_width, min_height)
     editor.maxsize(editor.winfo_screenwidth(), editor.winfo_screenheight())
-    #image = PhotoImage(file = f"{stack['root']}/{stack['var_path']}/iris.png")
+    #image = PhotoImage(file = f"{cache['root']}/{cache['var_path']}/iris.png")
     #editor.iconphoto(False, image)
     editor.state('zoomed')
     center_tk_window.center(editor, editor)
@@ -187,12 +203,13 @@ if __name__ == '__main__':
         if len(opts):
             for o, a in opts:
                 if o in ('-h', '--help'):
-                    print(stack['copyright'])
-                    for _ in stack['help']: print(_)
+                    print(cache['copyright'])
+                    for _ in cache['help']: print(_)
                     sys.exit(1)
                 elif o in ('-t', '--terminal'): loop()
                 else: raise getopt.GetoptError()
         else: show(); raise Exit
+    except StartupError as e: report('Startup failed.', True); sys.exit(1)
     except AuthError as e: report('Authentication failed.', True); sys.exit(1)
     except getopt.GetoptError as e: report('Unhandled option.', True); sys.exit(1)
     except Exit as e: os.system('cls'); report('Session ended.'); sys.exit(1)
