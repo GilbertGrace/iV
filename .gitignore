@@ -1,4 +1,6 @@
 support
+!support/src/*.json
 __pycache__
 required/var/media/iris.pdn
-required/var/modules
+required/var
+!required/var/media

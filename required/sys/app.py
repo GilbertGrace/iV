@@ -1,6 +1,8 @@
-''' Bootloader '''
+''' Bootstrap '''
+
 from pdb import set_trace as pause
-from tkinter import *
+from varname.helpers import Wrapper
+from uuid import getnode as get_mac
 import os, sys, datetime, time, socket, getopt, getpass, signal, hashlib, glob, json, sqlite3, center_tk_window, binascii, random, string
 
 class StartupError(Exception): pass
@@ -9,30 +11,10 @@ class Exit(Exception): pass
 
 # data
 cache:dict = {
-    'version' : '1.0',
     'root' : 'E:/Projects/iV Pro',
-    'source' : 'support/src',
     'etc_path' : 'required/etc',
     'var_path' : 'required/var',
-    'connection_string' : 'system.db',
-    'config_file' : 'config.json',
-    'log_file' : 'access.log',
-    'copyright' : '\u00a9 2021 KOJAN Group LLP, all rights reserved.',
-    'author' : 'Tanaka Mutsatsa',
-    'date' : '31/1/2021',
-    'company' : 'Studio KOJAN',
-    'tel' : '07398290770',
-    'email' : 'admin@studiokojan.com',
-    'public_release' : False,
-    'password' : '4d164cbf641eabdcfd4a61eab475f245a559a3f8b287618fb3d414b07eea86df',
-    'authorised' : [
-        'd23ff466e452db6e45e4c1bac2bdb4ce3bf9fd37789500b266f4145c7bb209dc'
-    ],
-    'required' : ['lib', 'sys'],
-    'help' : [
-        '-t : launch terminal',
-        '-h : show this dialog'
-    ]
+    'config_file' : 'config.json'
 }
 
 with open(os.path.join(cache['root'], cache['etc_path'], cache['config_file']), 'r') as f: cache.update(json.loads(f.read()))
@@ -40,52 +22,9 @@ with open(os.path.join(cache['root'], cache['etc_path'], cache['config_file']), 
 for _ in cache['required']:
     if not os.path.join(cache['root'], 'required', _) in sys.path: sys.path.append(os.path.join(cache['root'], 'required', _))
 
-from ttk import *
+import tkinter, ttk; from tkinter import *; from ttk import *; from editor import *; from engine import *; from client import *; from dev import *
 
-class Client:
-    running:bool = False
-
-    @staticmethod
-    def execute(*args:list, **kwds:dict) -> dict:
-        o = input('> ').rstrip().split('::')#; pause()
-        if o[0] == 'make':
-            for _ in glob.glob(os.path.join(cache['root'], cache['source'], '*.json')):
-                file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{"".join(random.choice(string.digits) for i in range(25))}.sfx')
-                while file in glob.glob(os.path.join(cache['root'], cache['var_path'], 'modules/*.json')): file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{"".join(random.choice(string.digits) for i in range(25))}.sfx')
-                with open(_, 'r') as f: write(f.read(), file)
-        #elif o[0] == '': pass
-        else: print('syntax error')
-
-class Engine:
-    def __init__(self) -> None:
-        global cache, splash, progress
-        report('Engine waking...')
-        
-        # load modules to cache
-        modules = glob.glob('E:/Projects/iV Pro/required/var/modules/*.sfx')
-        length = len(modules)
-        progress_chunk_size = 100; count = 1
-        if length: progress_chunk_size = round(100 / length)
-
-        for _ in modules:
-            with open(_, 'r') as f: o = json.loads(bytes.fromhex(read(f.read())).replace(b'\n', b'').replace(b' ', b'').replace(b'##', b' ')); cache.update(o)
-            splash.after(10, None) # animate progress
-            progress['value'] = progress_chunk_size * count
-            splash.update_idletasks() # update graphics
-            count += 1
-
-        for key, val in cache.items():
-            if isinstance(val, dict) and 'methodname' in val:
-                # declare global functions
-                def __foo__(): exec(val['method'])
-                if not val['methodname'] in dir(sys.modules[__name__]): setattr(sys.modules[__name__], val['methodname'], __foo__)
-
-        progress['value'] = 100 # done
-        report('Engine awake')
-
-    def render(): return
-
-splash:Tk = None;  editor:Tk = None; engine:Engine = None; progress:object = None
+splash:tkinter.Tk = None;  editor:tkinter.Tk = None; engine:Engine = None; progress:object = None
 
 def report(message:str, verbose:bool=False): 
     with open(os.path.join(cache['root'], cache['etc_path'], cache['log_file']), 'a') as log: log.write(f'[{datetime.datetime.now()}]: {message}\n')
@@ -102,99 +41,60 @@ def write(source:str, target:str):
 def loop() -> None:
     ''' Terminal thread loop '''
     Client.running = True
+    os.system('cls')
     while (Client.running): Client.execute()
     raise Exit # finished
 
-def show():
-    ''' Loads the editor '''
-    global splash, progress
-    splash = Tk()
-    splash.title('Welcome')
-    min_width = 600; min_height = 400
-    splash.geometry('%sx%s+0+0' % (min_width, min_height))
-    splash.resizable(0, 0)
-    image = PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/splash.gif") 
-    handle = Label( splash, image = image) 
-    handle.place(x = 0, y = 0)
-    button = Button(splash, text ='Launch', command = start)
-    button.pack()
-    progress = Progressbar(splash, orient = HORIZONTAL, length = 100, mode = 'determinate')
-    progress.pack(pady = 10)
-    splash.wm_attributes('-topmost', True)
-    splash.protocol('WM_DELETE_WINDOW', closing)
-    center_tk_window.center(splash, splash)
-    #splash.after_idle(start)
-    splash.mainloop()
-
-def draw() -> None:
-    ''' UI builder '''
-    global cache
-    done:bool = False
-    target = []
-    names = []
-    count = 0
-    
-    for key, val in cache.items():
-        if isinstance(val, dict) and 'constructor' in val: target.append(key)
-
-    while(not done and count < 3):
-        for key in target:
-            if not key in names:
-                try:
-                    o:object = None
-                    constructor = cache[key]['constructor']
-                    properties = cache[key]['properties']
-                    
-                    for _ in constructor:
-                        if isinstance(constructor[_], str) and constructor[_][0] == '@': constructor[_] = getattr(sys.modules[__name__], constructor[_][1:]) # resolve symbolic links
-                                    
-                    for prop in properties:
-                        for _ in prop['options']:
-                            if isinstance(prop['options'][_], str) and prop['options'][_][0] == '@': prop['options'][_] = getattr(sys.modules[__name__], prop['options'][_][1:]) # resolve symbolic links
-                    
-                    o = getattr(sys.modules[__name__], cache[key]['type'])(getattr(sys.modules[__name__], cache[key]['parent']), **constructor) # create object
-
-                    for prop in properties: getattr(o, prop['method'])(**prop['options']) # implement property
-                    
-                    if o: names.append(key)
-                    else: o = None
-                except Exception as e: report(e, True)
-
-        if names.sort() == target.sort(): done = True
-        else: done = False; count += 1
-
-    if names.sort() != target.sort(): raise StartupError
-
 def start(*args, **kwargs):
+    ''' bootstrap '''
     global engine, editor, splash, progress
-    #engine = Engine()
-
-    editor = Tk()
+    engine = Engine(progress, splash, cache)#; pause()
+    editor = Editor(cache, engine)
     editor.wm_attributes("-disabled", True)
     editor.title('iV Pro')
-  
     min_width = 1280; min_height = 720
     editor.geometry('%sx%s+0+0' % (min_width, min_height))
     editor.minsize(min_width, min_height)
     editor.maxsize(editor.winfo_screenwidth(), editor.winfo_screenheight())
-    #image = PhotoImage(file = f"{cache['root']}/{cache['var_path']}/iris.png")
-    #editor.iconphoto(False, image)
     editor.state('zoomed')
     center_tk_window.center(editor, editor)
-    engine = Engine()
-    draw()
-    closing()
+    closing()#; pause()
+    #editor.winfo_toplevel().iconphoto(False, PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/iris.png"))
+
+def show():
+    ''' splashscreen '''
+    global splash, progress
+    splash = tkinter.Tk()
+    splash.winfo_toplevel().iconphoto(False, PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/iris.png"))
+    splash.title('Start Page')
+    min_width = 600; min_height = 400
+    splash.geometry('%sx%s+0+0' % (min_width, min_height))
+    splash.resizable(0, 0)
+    splash.overrideredirect(1) #Remove border
+    image = tkinter.PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/splash.gif") 
+    handle = tkinter.Label( splash, image = image) 
+    handle.place(x = 0, y = 0)
+    #button = tkinter.Button(splash, text ='Launch', command = start)
+    #button.pack()
+    #progress = ttk.Progressbar(splash, orient = tkinter.HORIZONTAL, length = 900, mode = 'determinate')
+    #progress.pack(pady = 10, side='bottom')
+    splash.wm_attributes('-topmost', True)
+    splash.protocol('WM_DELETE_WINDOW', closing)
+    center_tk_window.center(splash, splash)
+    splash.after_idle(start)
+    splash.mainloop()
 
 def closing():
     global splash, editor
     if editor: editor.wm_attributes("-disabled", False)
     splash.destroy()
+    Client.running = False
 
 # entry point
 if __name__ == '__main__':
     try:
-        if hashlib.sha256(bytes(socket.gethostbyname(socket.gethostname()), 'utf_8')).hexdigest() == 'd23ff466e452db6e45e4c1bac2bdb4ce3bf9fd37789500b266f4145c7bb209dc': pass
-        elif hashlib.sha256(bytes(getpass.getpass('password: '), 'utf_8')).hexdigest() == '4d164cbf641eabdcfd4a61eab475f245a559a3f8b287618fb3d414b07eea86df': pass
+        if hashlib.sha256(bytes(socket.gethostbyname(socket.gethostname()), 'utf_8')).hexdigest() in cache['authorised']: pass
+        elif hashlib.sha256(bytes(getpass.getpass('password: '), 'utf_8')).hexdigest() == cache['password']: pass
         else: raise AuthError()
         def shutdown(signum, frame): raise Exit()
         signal.signal(signal.SIGINT, shutdown)
