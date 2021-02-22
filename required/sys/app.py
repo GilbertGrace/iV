@@ -14,7 +14,13 @@ cache:dict = {
     'root' : 'E:/Projects/iV Pro',
     'etc_path' : 'required/etc',
     'var_path' : 'required/var',
-    'config_file' : 'config.json'
+    'config_file' : 'config.json',
+    'client' : {
+        'ready' : False
+    },
+    'engine' : {
+        'ready' : False
+    }
 }
 
 with open(os.path.join(cache['root'], cache['etc_path'], cache['config_file']), 'r') as f: cache.update(json.loads(f.read()))
@@ -40,16 +46,21 @@ def write(source:str, target:str):
 
 def loop() -> None:
     ''' Terminal thread loop '''
-    Client.running = True
+    global engine, editor, splash, progress; init(True)
+    engine = Engine(progress, splash, cache)
+    #pause()
+    cache['client']['ready'] = True
     os.system('cls')
-    while (Client.running): Client.execute()
+    
+    while (cache['client']['ready']): Client.execute(cache)
+    
     raise Exit # finished
 
 def start(*args, **kwargs):
     ''' bootstrap '''
     global engine, editor, splash, progress
     engine = Engine(progress, splash, cache)#; pause()
-    editor = Editor(cache, engine)
+    editor = Editor(cache)
     editor.wm_attributes("-disabled", True)
     editor.title('iV Pro')
     min_width = 1280; min_height = 720
@@ -61,28 +72,39 @@ def start(*args, **kwargs):
     closing()#; pause()
     #editor.winfo_toplevel().iconphoto(False, PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/iris.png"))
 
-def show():
+def init(commandLine:bool=False):
     ''' splashscreen '''
     global splash, progress
+
+    for _ in glob.glob(os.path.join(cache['root'], cache['source'], '*.json')):
+        file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{os.path.basename(_)[:-5]}.sfx') #"".join(random.choice(string.digits) for i in range(25))
+        while file in glob.glob(os.path.join(cache['root'], cache['var_path'], 'modules/*.json')): file = os.path.join(cache['root'], cache['var_path'], 'modules', f'{"".join(random.choice(string.digits) for i in range(25))}.sfx')
+        with open(_, 'r') as f: write(f.read(), file)
+
     splash = tkinter.Tk()
+    image = tkinter.PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/splash.gif")
     splash.winfo_toplevel().iconphoto(False, PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/iris.png"))
-    splash.title('Start Page')
-    min_width = 600; min_height = 400
-    splash.geometry('%sx%s+0+0' % (min_width, min_height))
-    splash.resizable(0, 0)
-    splash.overrideredirect(1) #Remove border
-    image = tkinter.PhotoImage(file = f"{cache['root']}/{cache['var_path']}/media/splash.gif") 
-    handle = tkinter.Label( splash, image = image) 
-    handle.place(x = 0, y = 0)
-    #button = tkinter.Button(splash, text ='Launch', command = start)
-    #button.pack()
-    #progress = ttk.Progressbar(splash, orient = tkinter.HORIZONTAL, length = 900, mode = 'determinate')
-    #progress.pack(pady = 10, side='bottom')
-    splash.wm_attributes('-topmost', True)
-    splash.protocol('WM_DELETE_WINDOW', closing)
-    center_tk_window.center(splash, splash)
-    splash.after_idle(start)
-    splash.mainloop()
+
+    if not commandLine:
+        splash.title('Start Page')
+        min_width = 600; min_height = 400
+        splash.geometry('%sx%s+0+0' % (min_width, min_height))
+        splash.resizable(0, 0)
+        splash.overrideredirect(1) #Remove border
+        #pause()
+        handle = tkinter.Label( splash, image = image) 
+        handle.place(x = 0, y = 0)
+        #button = tkinter.Button(splash, text ='Launch', command = start)
+        #button.pack()
+        #progress = ttk.Progressbar(splash, orient = tkinter.HORIZONTAL, length = 900, mode = 'determinate')
+        #progress.pack(pady = 10, side='bottom')
+        splash.wm_attributes('-topmost', True)
+        splash.protocol('WM_DELETE_WINDOW', closing)
+        center_tk_window.center(splash, splash)
+        splash.after_idle(start)
+        splash.mainloop()
+    else:
+        splash.withdraw()
 
 def closing():
     global splash, editor
@@ -108,8 +130,8 @@ if __name__ == '__main__':
                     sys.exit(1)
                 elif o in ('-t', '--terminal'): loop()
                 else: raise getopt.GetoptError()
-        else: show(); raise Exit
+        else: init(); raise Exit
     except StartupError as e: report('Startup failed.', True); sys.exit(1)
     except AuthError as e: report('Authentication failed.', True); sys.exit(1)
     except getopt.GetoptError as e: report('Unhandled option.', True); sys.exit(1)
-    except Exit as e: os.system('cls'); report('Session ended.'); sys.exit(1)
+    except Exit as e: os.system('cls'); report('Session ended.'); sys.exit(1) # clean up

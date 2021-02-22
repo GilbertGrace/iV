@@ -18,12 +18,9 @@
     "authorised" : [
         "d23ff466e452db6e45e4c1bac2bdb4ce3bf9fd37789500b266f4145c7bb209dc"
     ],
-    "required" : ["lib", "sys"],
+    "required" : [ "lib", "sys" ],
     "help" : [
         "-t : launch terminal",
         "-h : show this dialog"
-    ],
-    "system" : {
-        
-    }
+    ]
 }
