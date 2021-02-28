@@ -1,5 +1,6 @@
-__pycache__
 support
-required/var
-!support/src/*.json
-!required/var/media
+tmp
+*.db
+*.log
+__pycache__
+required/var/src
